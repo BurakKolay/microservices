@@ -25,6 +25,6 @@ public class Model {
     @ManyToOne
     private Brand brand;
 
-    @OneToMany(mappedBy = "model")
+    @OneToMany(mappedBy = "model",cascade = CascadeType.ALL)
     private List<Car> cars;
 }

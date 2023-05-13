@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  kafka:
+    container_name: kafka
+    image: bashj79/kafka-kraft
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/opt/kafka/kafka-logs
+  filterdb:
+    container_name: filterdb-dev
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db/
+volumes:
+  mongodb_data:
+  kafka_data:

@@ -59,7 +59,6 @@ public class ModelManager implements ModelService {
 
     @Override
     public void delete(UUID id) {
-
         rules.checkIfModelExists(id);
         repository.deleteById(id);
     }
