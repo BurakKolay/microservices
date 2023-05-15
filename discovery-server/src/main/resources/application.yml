@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: discover-server
+server:
+  port: 8761
+eureka:
+  client:
+    fetch-registry: false             #Bu ve altindaki kayit defteri kendisini tutmasin diye ekledik
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+  instance:
+    hostname: discovery-server
