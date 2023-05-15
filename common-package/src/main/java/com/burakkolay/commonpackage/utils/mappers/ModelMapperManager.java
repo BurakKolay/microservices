@@ -7,7 +7,6 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
-@Service
 public class ModelMapperManager implements ModelMapperService{
     private ModelMapper mapper;
     @Override
