@@ -1,4 +1,4 @@
-package com.burakkolay.commonpackage.configuration;
+package com.burakkolay.commonpackage.configuration.mappers;
 
 import com.burakkolay.commonpackage.utils.mappers.ModelMapperManager;
 import com.burakkolay.commonpackage.utils.mappers.ModelMapperService;
