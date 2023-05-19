@@ -1,5 +1,6 @@
 package com.burakkolay.inventoryservice.api.controllers;
 
+import com.burakkolay.commonpackage.utils.dto.ClientResponse;
 import com.burakkolay.inventoryservice.business.abstracts.CarService;
 import com.burakkolay.inventoryservice.business.dto.request.create.CreateCarRequest;
 import com.burakkolay.inventoryservice.business.dto.request.update.UpdateCarRequest;
@@ -47,5 +48,10 @@ public class CarController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id){
         service.delete(id);
+    }
+
+    @GetMapping("/check-car-available/{id}")
+    public ClientResponse checkIfCarAvailable(@PathVariable UUID id){
+        return service.checkIfCarAvailable(id);
     }
 }

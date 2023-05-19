@@ -1,6 +1,6 @@
 package com.burakkolay.inventoryservice.business.concretes;
 
-import com.burakkolay.commonpackage.events.BrandDeletedEvent;
+import com.burakkolay.commonpackage.events.inventory.BrandDeletedEvent;
 import com.burakkolay.commonpackage.utils.mappers.ModelMapperService;
 import com.burakkolay.inventoryservice.business.abstracts.BrandService;
 import com.burakkolay.inventoryservice.business.dto.request.create.CreateBrandRequest;
@@ -9,10 +9,10 @@ import com.burakkolay.inventoryservice.business.dto.responses.create.CreateBrand
 import com.burakkolay.inventoryservice.business.dto.responses.get.GetAllBrandsResponse;
 import com.burakkolay.inventoryservice.business.dto.responses.get.GetBrandResponse;
 import com.burakkolay.inventoryservice.business.dto.responses.update.UpdateBrandResponse;
-import com.burakkolay.inventoryservice.business.kafka.producer.InventoryProducer;
 import com.burakkolay.inventoryservice.business.rules.BrandBusinessRules;
 import com.burakkolay.inventoryservice.entities.Brand;
 import com.burakkolay.inventoryservice.repository.BrandRepository;
+import com.burakkolay.commonpackage.kafka.producer.KafkaProducer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class BrandManager implements BrandService {
     private final BrandRepository repository;
     private final ModelMapperService mapper;
     private final BrandBusinessRules rules;
-    private final InventoryProducer producer;
+    private final KafkaProducer producer;
     @Override
     public List<GetAllBrandsResponse> getAll() {
         var brands = repository.findAll();
@@ -67,6 +67,6 @@ public class BrandManager implements BrandService {
     }
 
     private void sendKafkaBrandDeletedEvent(UUID id) {
-        producer.sendMessage(new BrandDeletedEvent(id));
+        producer.sendMessage(new BrandDeletedEvent(id),"brand-deleted");
     }
 }

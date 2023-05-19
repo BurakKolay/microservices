@@ -1,5 +1,6 @@
-package com.burakkolay.commonpackage.events;
+package com.burakkolay.commonpackage.events.rental;
 
+import com.burakkolay.commonpackage.events.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarDeletedEvent {
+public class RentalDeletedEvent implements Event {
     private UUID carId;
 }

@@ -1,8 +1,8 @@
 package com.burakkolay.filterservice.business.kafka.consumer;
 
-import com.burakkolay.commonpackage.events.BrandDeletedEvent;
-import com.burakkolay.commonpackage.events.CarCreatedEvent;
-import com.burakkolay.commonpackage.events.CarDeletedEvent;
+import com.burakkolay.commonpackage.events.inventory.BrandDeletedEvent;
+import com.burakkolay.commonpackage.events.inventory.CarCreatedEvent;
+import com.burakkolay.commonpackage.events.inventory.CarDeletedEvent;
 import com.burakkolay.commonpackage.utils.mappers.ModelMapperService;
 import com.burakkolay.filterservice.business.abstracts.FilterService;
 import com.burakkolay.filterservice.entities.Filter;
