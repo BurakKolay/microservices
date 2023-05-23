@@ -1,5 +1,6 @@
 package com.burakkolay.commonpackage.kafka.producer;
 
+
 import com.burakkolay.commonpackage.events.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

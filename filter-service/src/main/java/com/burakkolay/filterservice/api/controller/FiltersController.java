@@ -20,10 +20,10 @@ import java.util.UUID;
 public class FiltersController {
     private final FilterService service;
 
-    @PostConstruct
-    public void createDb(){
-        service.add(new Filter());
-    }
+//    @PostConstruct
+//    public void createDb(){
+//        service.add(new Filter());
+//    }
 
     @GetMapping
     public List<GetAllFiltersResponse> getAll(){

@@ -14,4 +14,8 @@ public class Paths {
     public static class Rental {
         public static final String ServiceBasePackage = "com.burakkolay.rentalservice";
     }
+
+    public static class Maintenance {
+        public static final String ServiceBasePackage = "com.burakkolay.maintenanceservice";
+    }
 }

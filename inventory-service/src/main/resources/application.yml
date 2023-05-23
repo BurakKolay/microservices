@@ -17,7 +17,7 @@ spring:
     name: inventory-service
   kafka:
     producer:
-      bootstrap-servers: http://192.168.1.102:9092
+      bootstrap-servers: http://localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:

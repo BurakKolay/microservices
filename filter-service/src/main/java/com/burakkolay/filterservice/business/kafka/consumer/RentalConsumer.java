@@ -18,10 +18,11 @@ public class RentalConsumer {
 
     @KafkaListener(
             topics = "rental-created",
-            groupId = "inventory-rental-create"
+            groupId = "filter-rental-create"
     )
     public void consume(RentalCreatedEvent event){
         var filter = service.getByCarId(event.getCarId());
+        filter.setState("Rented");
         service.add(filter);
         log.info("Rental created event consumed {}", event);
     }
