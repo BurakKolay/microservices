@@ -2,12 +2,12 @@ package com.burakkolay.paymentservice.business.concretes;
 
 
 import com.burakkolay.commonpackage.utils.dto.ClientResponse;
+import com.burakkolay.commonpackage.utils.dto.CreateRentalPaymentRequest;
 import com.burakkolay.commonpackage.utils.exceptions.BusinessException;
 import com.burakkolay.commonpackage.utils.mappers.ModelMapperService;
 import com.burakkolay.paymentservice.business.abstracts.PaymentService;
 import com.burakkolay.paymentservice.business.abstracts.PosService;
 import com.burakkolay.paymentservice.business.dto.requets.CreatePaymentRequest;
-import com.burakkolay.paymentservice.business.dto.requets.CreateRentalPaymentRequest;
 import com.burakkolay.paymentservice.business.dto.requets.UpdatePaymentRequest;
 import com.burakkolay.paymentservice.business.dto.responses.CreatePaymentResponse;
 import com.burakkolay.paymentservice.business.dto.responses.GetAllPaymentsResponse;
@@ -16,9 +16,7 @@ import com.burakkolay.paymentservice.business.dto.responses.UpdatePaymentRespons
 import com.burakkolay.paymentservice.business.rules.PaymentBusinessRules;
 import com.burakkolay.paymentservice.entities.Payment;
 import com.burakkolay.paymentservice.repository.PaymentRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,71 +26,78 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PaymentManager implements PaymentService {
     private final PaymentRepository repository;
-    private final PaymentBusinessRules rules;
     private final ModelMapperService mapper;
+    private final PaymentBusinessRules rules;
     private final PosService posService;
 
     @Override
     public List<GetAllPaymentsResponse> getAll() {
-        var payments = repository.findAll();
-        return payments.stream().map(payment -> mapper.forResponse()
-                .map(payment, GetAllPaymentsResponse.class)).toList();
+        var brands = repository.findAll();
+        var response = brands
+                .stream()
+                .map(brand -> mapper.forResponse().map(brand, GetAllPaymentsResponse.class))
+                .toList();
+
+        return response;
     }
 
     @Override
     public GetPaymentResponse getById(UUID id) {
         rules.checkIfPaymentExists(id);
-        return mapper.forResponse().map(repository.findById(id), GetPaymentResponse.class);
+        var brand = repository.findById(id).orElseThrow();
+        var response = mapper.forResponse().map(brand, GetPaymentResponse.class);
+
+        return response;
     }
 
     @Override
     public CreatePaymentResponse add(CreatePaymentRequest request) {
-        rules.checkIfCardExists(request.getCardNumber());
-        var payment = mapper.forResponse().map(request, Payment.class);
-        payment.setId(UUID.randomUUID());
-        var createdPayment = repository.save(payment);
-        return mapper.forResponse().map(createdPayment, CreatePaymentResponse.class);
+        rules.checkIfCardNumberExists(request.getCardNumber());
+        var brand = mapper.forRequest().map(request, Payment.class);
+        var createdPayment = repository.save(brand);
+        var response = mapper.forResponse().map(createdPayment, CreatePaymentResponse.class);
+
+        return response;
     }
 
     @Override
     public UpdatePaymentResponse update(UUID id, UpdatePaymentRequest request) {
         rules.checkIfPaymentExists(id);
-        var payment = mapper.forResponse().map(request, Payment.class);
-        payment.setId(id);
-        var updatedPayment = repository.save(payment);
-        return mapper.forResponse().map(updatedPayment, UpdatePaymentResponse.class);
+        var brand = mapper.forRequest().map(request, Payment.class);
+        brand.setId(id);
+        repository.save(brand);
+        var response = mapper.forResponse().map(brand, UpdatePaymentResponse.class);
 
+        return response;
     }
 
     @Override
     public void delete(UUID id) {
         rules.checkIfPaymentExists(id);
         repository.deleteById(id);
-
     }
 
-    public ClientResponse pay(CreateRentalPaymentRequest request, Payment payment) {
+    @Override
+    public ClientResponse processPayment(CreateRentalPaymentRequest request) {
         var response = new ClientResponse();
+        processPaymentTransaction(request, response);
+
+        return response;
+    }
+
+    private void processPaymentTransaction(CreateRentalPaymentRequest request, ClientResponse response) {
         try {
-            rules.checkIfPaymentIsValid(request);
-            rules.checkIfBalanceIdEnough(payment.getBalance(), request.getPrice());
-            posService.pay(); // fake pos service
-            payment.setBalance(payment.getBalance() - request.getPrice());
+            rules.checkIfPaymentValid(request);
+            var payment = repository.findByCardNumber(request.getCardNumber());
+            double balance = payment.getBalance();
+            rules.checkIfBalanceIsEnough(balance, request.getPrice());
+            posService.pay();
+            payment.setBalance(balance - request.getPrice());
             repository.save(payment);
             response.setSuccess(true);
         } catch (BusinessException exception) {
             response.setSuccess(false);
             response.setMessage(exception.getMessage());
-
         }
-        return response;
-    }
-
-
-    @Override
-    public ClientResponse processRentalPayment(CreateRentalPaymentRequest request) {
-        Payment payment = repository.findByCardNumber(request.getCardNumber());
-        return pay(request, payment);
-
     }
 }

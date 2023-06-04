@@ -2,8 +2,8 @@ package com.burakkolay.paymentservice.business.rules;
 
 
 import com.burakkolay.commonpackage.utils.constants.Messages;
+import com.burakkolay.commonpackage.utils.dto.CreateRentalPaymentRequest;
 import com.burakkolay.commonpackage.utils.exceptions.BusinessException;
-import com.burakkolay.paymentservice.business.dto.requets.CreateRentalPaymentRequest;
 import com.burakkolay.paymentservice.repository.PaymentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,23 +17,17 @@ public class PaymentBusinessRules {
 
     public void checkIfPaymentExists(UUID id) {
         if (!repository.existsById(id)) {
-            throw new BusinessException(Messages.Payment.NotFound);
+            throw new BusinessException("PAYMENT_NOT_FOUND");
         }
     }
 
-    public void checkIfBalanceIdEnough(double balance, double price) {
-        if (balance < price) {
-            throw new BusinessException(Messages.Payment.NotEnoughMoney);
-        }
-    }
-
-    public void checkIfCardExists(String cardNumber) {
+    public void checkIfCardNumberExists(String cardNumber) {
         if (repository.existsByCardNumber(cardNumber)) {
-            throw new BusinessException(Messages.Payment.CardNumberAlreadyExists);
+            throw new BusinessException("CARD_NUMBER_ALREADY_EXISTS");
         }
     }
 
-    public void checkIfPaymentIsValid(CreateRentalPaymentRequest request) {
+    public void checkIfPaymentValid(CreateRentalPaymentRequest request) {
         if (!repository.existsByCardNumberAndCardHolderAndCardExpirationYearAndCardExpirationMonthAndCardCvv(
                 request.getCardNumber(),
                 request.getCardHolder(),
@@ -41,7 +35,13 @@ public class PaymentBusinessRules {
                 request.getCardExpirationMonth(),
                 request.getCardCvv()
         )) {
-            throw new BusinessException(Messages.Payment.NotAValidPayment);
+            throw new BusinessException("NOT_A_VALID_PAYMENT");
+        }
+    }
+
+    public void checkIfBalanceIsEnough(double balance, double price) {
+        if (balance < price) {
+            throw new BusinessException("NOT_ENOUGH_MONEY");
         }
     }
 }

@@ -7,11 +7,11 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAllPaymentsResponse {
+@Getter
+@Setter
+public class UpdatePaymentResponse {
     private UUID id;
     private String cardNumber;
     private String cardHolder;

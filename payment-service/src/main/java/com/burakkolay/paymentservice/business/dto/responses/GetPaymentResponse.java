@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class GetPaymentResponse {
-    private int id;
+    private UUID id;
     private String cardNumber;
     private String cardHolder;
     private int cardExpirationYear;

@@ -12,6 +12,8 @@ public class FakePosServiceAdapter implements PosService {
     @Override
     public void pay() {
         boolean isPaymentSuccessful = new Random().nextBoolean();
-        if (!isPaymentSuccessful) throw new BusinessException("PAYMENT_FAILED");
+        if (isPaymentSuccessful) {
+            throw new BusinessException("PAYMENT_FAILED");
+        }
     }
 }
