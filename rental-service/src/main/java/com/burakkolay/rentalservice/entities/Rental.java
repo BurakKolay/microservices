@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -16,7 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "rentals")
 public class Rental {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
