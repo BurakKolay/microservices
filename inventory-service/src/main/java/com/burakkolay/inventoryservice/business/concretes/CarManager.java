@@ -33,19 +33,17 @@ public class CarManager implements CarService {
     @Override
     public List<GetAllCarsResponse> getAll() {
         var cars=repository.findAll();
-        var response = cars
+        return cars
                 .stream()
                 .map(car -> mapper.forResponse().map(car,GetAllCarsResponse.class))
                 .toList();
-        return response;
     }
 
     @Override
     public GetCarResponse getById(UUID id) {
         rules.checkIfCarExists(id);
         var car = repository.findById(id).orElseThrow();
-        var response = mapper.forResponse().map(car,GetCarResponse.class);
-        return response;
+        return mapper.forResponse().map(car,GetCarResponse.class);
     }
 
     @Override
@@ -55,9 +53,7 @@ public class CarManager implements CarService {
         car.setState(State.Available);
         var createdCar = repository.save(car);
         sendKafkaCarCreatedEvent(createdCar);
-        var response = mapper.forResponse().map(createdCar, CreateCarResponse.class);
-
-        return response;
+        return mapper.forResponse().map(createdCar, CreateCarResponse.class);
     }
 
     @Override

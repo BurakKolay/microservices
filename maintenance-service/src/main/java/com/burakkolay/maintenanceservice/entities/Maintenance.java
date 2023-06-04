@@ -22,6 +22,7 @@ public class Maintenance {
     private UUID id;
     private UUID carId;
     private boolean isCompleted;
+    private String information;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 }

@@ -38,8 +38,7 @@ public class BrandManager implements BrandService {
     public GetBrandResponse getById(UUID id) {
         rules.checkIfBrandExists(id);
         var brand = repository.findById(id).orElseThrow();
-        var response = mapper.forResponse().map(brand,GetBrandResponse.class);
-        return response;
+        return mapper.forResponse().map(brand,GetBrandResponse.class);
     }
 
     @Override

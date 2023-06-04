@@ -12,23 +12,30 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MaintenanceBusinessRules {
     private final MaintenanceRepository repository;
-    private final CarClient carClient;
+    private final CarClient client;
 
-    public void checkIfMaintenanceExists(UUID id){
-        if(!repository.existsById(id)){
+    public void checkIfMaintenanceExists(UUID id) {
+        if (!repository.existsById(id)) {
             throw new BusinessException("MAINTENANCE_NOT_EXISTS");
         }
     }
 
-    public void ensureCarIsAvailable(UUID carId) {
-        var response = carClient.checkIfCarAvailable(carId);
-        if (!response.isSuccess()) {
-            throw new BusinessException(response.getMessage());
+    public void checkIfCarIsNotUnderMaintenance(UUID carId) {
+        if (!repository.existsByCarIdAndIsCompletedIsFalse(carId)) {
+            throw new BusinessException("CAR_IS_NOT_UNDER_MAINTENANCE");
         }
     }
-    public void checkIfCarIsNotUnderMaintenance(UUID carId) {
-        if (!repository.existsByCarIdAndIsCompletedFalse(carId)) {
-            throw new BusinessException("CAR_IS_CURRENTLY_UNDER_MAINTENANCE");
+
+    public void checkIfCarUnderMaintenance(UUID carId) {
+        if (repository.existsByCarIdAndIsCompletedIsFalse(carId)) {
+            throw new BusinessException("CAR_IS_UNDER_MAINTENANCE");
+        }
+    }
+
+    public void checkCarAvailabilityForMaintenance(UUID carId) {
+        var response = client.checkIfCarAvailable(carId);
+        if ((!response.isSuccess())) {
+            throw new BusinessException(response.getMessage());
         }
     }
 }

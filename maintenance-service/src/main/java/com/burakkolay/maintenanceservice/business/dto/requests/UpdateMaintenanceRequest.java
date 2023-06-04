@@ -13,9 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMaintenanceRequest {
-    private UUID carId;
     private String information;
-    private boolean isCompleted;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private UUID carId;
 }

@@ -23,7 +23,6 @@ public class ModelManager implements ModelService {
     private final ModelRepository repository;
     private final ModelMapperService mapper;
     private final ModelBusinessRules rules;
-    // TODO: update methods
     @Override
     public List<GetAllModelsResponse> getAll() {
         var models = repository.findAll();
@@ -36,8 +35,7 @@ public class ModelManager implements ModelService {
     public GetModelResponse getById(UUID id) {
         rules.checkIfModelExists(id);
         var model = repository.findById(id).orElseThrow();
-        var response = mapper.forResponse().map(model, GetModelResponse.class);
-        return response;
+        return mapper.forResponse().map(model, GetModelResponse.class);
     }
 
     @Override
