@@ -1,4 +1,5 @@
-package com.burakkolay.filterservice.entities;
+package com.burakkolay.invoiceservice.entities;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,23 +8,23 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
 @Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document
-public class Filter {
+public class Invoice{
     @Id
     private String id;
-    private UUID carId;
-    private UUID modelId;
-    private UUID brandId;
+    private String cardHolder;
     private String modelName;
     private String brandName;
     private String plate;
     private int modelYear;
     private double dailyPrice;
-    private String state;
+    private double totalPrice;
+    private int rentedForDays;
+    private LocalDateTime rentedAt;
 }
