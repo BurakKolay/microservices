@@ -52,6 +52,7 @@ public class MaintenanceManager implements MaintenanceService {
         maintenance.setCompleted(true);
         maintenance.setEndDate(LocalDateTime.now());
         repository.save(maintenance);
+        sendKafkaMaintenanceDeletedEvent(carId);
         return mapper.forResponse().map(maintenance, GetMaintenanceResponse.class);
     }
 
@@ -91,6 +92,6 @@ public class MaintenanceManager implements MaintenanceService {
     }
 
     private void sendKafkaMaintenanceDeletedEvent(UUID carId) {
-        producer.sendMessage(new MaintenanceDeletedEvent(carId), "maintenance-deleted");
+        producer.sendMessage(new MaintenanceDeletedEvent(carId), "maintenance-returned");
     }
 }

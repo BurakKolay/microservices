@@ -7,7 +7,5 @@ spring:
         default-label: master
         git:
           uri: https://github.com/BurakKolay/microservice-config-server
-  profiles:
-    active: dev
 server:
   port: 8888

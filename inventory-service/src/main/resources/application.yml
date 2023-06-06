@@ -1,43 +1,8 @@
 spring:
-  datasource:
-    username: postgres
-    url: jdbc:postgresql://localhost:5432/inventorydb
-    password: sakarya5454
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-      javax:
-        persistence:
-          validation:
-            mode: none
-    hibernate:
-      ddl-auto: update
   application:
     name: inventory-service
-  kafka:
-    producer:
-      bootstrap-servers: http://localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    consumer:
-      auto-offset-reset: earliest
-      bootstrap-servers: localhost:9092
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      properties:
-        spring:
-          json:
-            trusted:
-              packages: "*"
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-eureka:
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    instance-id: ${spring.application.name}:${instanceId:${random.value}}
-    prefer-ip-address: true
-server:
-  port: 0
+  cloud:
+    config:
+      profile: dev
+  config:
+    import: configserver:http://localhost:8888
