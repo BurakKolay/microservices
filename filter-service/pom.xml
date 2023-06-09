@@ -23,7 +23,7 @@
             <version>3.0.6</version>
         </dependency>
         <dependency>
-            <groupId>io.github.BurakKolay</groupId>
+            <groupId>com.BurakKolay</groupId>
             <artifactId>common-package</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
